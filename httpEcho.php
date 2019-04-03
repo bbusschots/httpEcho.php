@@ -1,4 +1,22 @@
-<?php ini_set('display_errors', 1); ?>
+<?php
+
+// TEMP WHILE DEBUGING - REMOVE LATER: enable error display
+ini_set('display_errors', 1);
+
+// workaround for the fact the NGINX + FPM does not provider a getallheaders() function
+// Credit: https://www.popmartian.com/tipsntricks/2015/07/14/howto-use-php-getallheaders-under-fastcgi-php-fpm-nginx-etc/
+if (!function_exists('getallheaders')) {
+    function getallheaders() {
+        $headers = [];
+        foreach ($_SERVER as $name => $value) {
+            if (substr($name, 0, 5) == 'HTTP_') {
+                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+            }
+        }
+        return $headers;
+    }
+}
+?>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -34,17 +52,6 @@
                 <dt>Method</dt>
                 <dd><code><?php echo($_SERVER['REQUEST_METHOD']); ?></code></dd>
                 <?php
-                if (!function_exists('getallheaders')) {
-                    function getallheaders() {
-                        $headers = [];
-                        foreach ($_SERVER as $name => $value) {
-                            if (substr($name, 0, 5) == 'HTTP_') {
-                                $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
-                            }
-                        }
-                        return $headers;
-                    }
-                }
                 $requestHeaders = getallheaders();
                 $requestHeaderNames = array_keys($requestHeaders);
                 ?>
