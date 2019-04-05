@@ -13,15 +13,22 @@
   {{^ request.headers}}
   *no headers*
   {{/ request.headers}}
-- Query String:     {{{request.queryString}}}
-- Form Data ({{{request.formDataCount}}}):
+- Query String:     {{# request.queryString}}{{{ request.queryString}}}{{/ request.queryString}}{{^ request.queryString}}*no query string*{{/ request.queryString}}
+- Query Parameters: ({{{request.queryParameterCount}}})
+  {{# request.queryParameters}}
+  * {{{name}}}: {{{value}}}
+  {{/ request.queryParameters}}
+  {{^ request.queryParameters}}
+  *no query parameters*
+  {{/ request.queryParameters}}
+- Form Data: ({{{request.formDataCount}}})
   {{# request.formData}}
   * {{{name}}}: {{{value}}}
   {{/ request.formData}}
   {{^ request.formData}}
   *no form data*
   {{/ request.formData}}
-- Cookies ({{{request.cookieCount}}}):
+- Cookies: ({{{request.cookieCount}}})
   {{# request.cookies}}
   * {{{name}}}: {{{value}}}
   {{/ request.cookies}}
