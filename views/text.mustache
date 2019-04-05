@@ -1,0 +1,36 @@
+# Client
+- IP:                          {{{client.ip}}}
+- Browser (User Agent String): {{{client.userAgent}}}
+
+# HTTP Request
+- URL:              {{{request.url}}}
+- Protocol Version: {{{request.httpVersion}}}
+- Method:           {{{request.method}}}
+- Headers ({{{request.headerCount}}}):
+  {{# request.headers}}
+  * {{{name}}}: {{{value}}}
+  {{/ request.headers}}
+  {{^ request.headers}}
+  *no headers*
+  {{/ request.headers}}
+- Query String:     {{{request.queryString}}}
+- Form Data ({{{request.formDataCount}}}):
+  {{# request.formData}}
+  * {{{name}}}: {{{value}}}
+  {{/ request.formData}}
+  {{^ request.formData}}
+  *no form data*
+  {{/ request.formData}}
+- Cookies ({{{request.cookieCount}}}):
+  {{# request.cookies}}
+  * {{{name}}}: {{{value}}}
+  {{/ request.cookies}}
+  {{^ request.cookies}}
+  *no cookies*
+  {{/ request.cookies}}
+
+# Server
+- IP:Port:      {{{server.ip}}}:{{{server.port}}}
+- Name:         {{{server.name}}}
+- Software:     {{{server.software}}}
+- CGI Revision: {{{server.cgiRevision}}}

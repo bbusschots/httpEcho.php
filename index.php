@@ -1,7 +1,10 @@
 <?php
 
 // DEBUGGING ONLY: enable error display
-// ini_set('display_errors', 1);
+ini_set('display_errors', 1);
+
+// load Composer-managed dependencies
+require __DIR__ . '/vendor/autoload.php';
 
 // workaround for the fact the NGINX + FPM does not provider a getallheaders() function
 // Credit: https://www.popmartian.com/tipsntricks/2015/07/14/howto-use-php-getallheaders-under-fastcgi-php-fpm-nginx-etc/
@@ -15,6 +18,77 @@ if (!function_exists('getallheaders')) {
         }
         return $headers;
     }
+}
+
+// gather the data
+$requestHeaders = getallheaders();
+$requestHeaderNames = array_keys($requestHeaders);
+$formData = $_GET + $_POST;
+$formDataNames =  array_keys($formData);
+$cookies = $_COOKIE;
+$cookieNames =  array_keys($_COOKIE);
+$echoData = (object)[
+    'client' => (object)[
+        'ip' => $_SERVER['REMOTE_ADDR'],
+        'userAgent' => $_SERVER['HTTP_USER_AGENT']
+    ],
+    'request' => (object)[
+        'url' => (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
+        'httpVersion' => $_SERVER['SERVER_PROTOCOL'],
+        'method' => $_SERVER['REQUEST_METHOD'],
+        'rawHeaders' => $requestHeaders,
+        'queryString' => $_SERVER['QUERY_STRING'] ? $_SERVER['QUERY_STRING'] : '',
+        'rawFormData' => $formData,
+        'rawCookies' => $cookies
+    ],
+    'server' => (object)[
+        'ip' => $_SERVER['SERVER_ADDR'],
+        'port' => $_SERVER['SERVER_PORT'],
+        'name' => $_SERVER['SERVER_NAME'],
+        'software' => $_SERVER['SERVER_SOFTWARE'],
+        'cgiRevision' => $_SERVER['GATEWAY_INTERFACE']
+    ]
+];
+$echoData->request->headerCount = sizeof($echoData->request->rawHeaders);
+$echoData->request->headers = [];
+foreach($requestHeaderNames as $headerName){
+    $echoData->request->headers[] = (object)[
+        'name' => $headerName,
+        'value' => $requestHeaders[$headerName]
+    ];
+}
+$echoData->request->formDataCount = sizeof($echoData->request->rawFormData);
+$echoData->request->formData = [];
+foreach($formDataNames as $formDataName){
+    $echoData->request->formData[] = (object)[
+        'name' => $formDataName,
+        'value' => $formData[$formDataName]
+    ];
+}
+$echoData->request->cookieCount = sizeof($echoData->request->rawCookies);
+$echoData->request->cookies = [];
+foreach($cookieNames as $cookieName){
+    $echoData->request->cookies[] = (object)[
+        'name' => $cookieName,
+        'value' => $cookies[$cookieName]
+    ];
+}
+
+// genereate the appropriate response based on the query string
+if($_GET['want'] === 'json'){
+    // JSON requested, so simply conevert and return the data object
+    header('Content-Type: application/json');
+    echo json_encode($echoData);
+    exit(0);
+}
+if($_GET['want'] === 'text'){
+    // plain text requested, so render data as text
+    $m = new Mustache_Engine([
+        'loader' => new Mustache_Loader_FilesystemLoader(dirname(__FILE__) . '/views')
+    ]);
+    header('Content-Type: text/plain');
+    echo $m->render('text', $echoData);
+    exit(0);
 }
 ?>
 <!DOCTYPE HTML>
