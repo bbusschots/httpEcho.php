@@ -1,10 +1,11 @@
 <?php
 
-// DEBUGGING ONLY: enable error display
+// DEBUGGING ONLY: enable error reporting and display
+// error_reporting(E_ALL);
 // ini_set('display_errors', 1);
 
 // load Composer-managed dependencies
-require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__.'/vendor/autoload.php';
 
 // workaround for the fact the NGINX + FPM does not provider a getallheaders() function
 // Credit: https://www.popmartian.com/tipsntricks/2015/07/14/howto-use-php-getallheaders-under-fastcgi-php-fpm-nginx-etc/
@@ -52,7 +53,7 @@ $echoData = (object)[
         'cgiRevision' => $_SERVER['GATEWAY_INTERFACE']
     ]
 ];
-$echoData->request->headerCount = sizeof($echoData->request->rawHeaders);
+$echoData->request->headerCount = count($echoData->request->rawHeaders);
 $echoData->request->headers = [];
 foreach($requestHeaderNames as $headerName){
     $echoData->request->headers[] = (object)[
@@ -60,7 +61,7 @@ foreach($requestHeaderNames as $headerName){
         'value' => $requestHeaders[$headerName]
     ];
 }
-$echoData->request->queryParameterCount = sizeof($echoData->request->rawQueryParameters);
+$echoData->request->queryParameterCount = count($echoData->request->rawQueryParameters);
 $echoData->request->queryParameters = [];
 foreach($queryParameterNames as $queryParameterName){
     $echoData->request->queryParameters[] = (object)[
@@ -68,7 +69,7 @@ foreach($queryParameterNames as $queryParameterName){
         'value' => $queryParameters[$queryParameterName]
     ];
 }
-$echoData->request->formDataCount = sizeof($echoData->request->rawFormData);
+$echoData->request->formDataCount = count($echoData->request->rawFormData);
 $echoData->request->formData = [];
 foreach($formDataNames as $formDataName){
     $echoData->request->formData[] = (object)[
@@ -76,7 +77,7 @@ foreach($formDataNames as $formDataName){
         'value' => $formData[$formDataName]
     ];
 }
-$echoData->request->cookieCount = sizeof($echoData->request->rawCookies);
+$echoData->request->cookieCount = count($echoData->request->rawCookies);
 $echoData->request->cookies = [];
 foreach($cookieNames as $cookieName){
     $echoData->request->cookies[] = (object)[
@@ -84,4 +85,3 @@ foreach($cookieNames as $cookieName){
         'value' => $cookies[$cookieName]
     ];
 }
-?>

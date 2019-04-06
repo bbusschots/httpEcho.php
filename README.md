@@ -23,3 +23,15 @@ There are currently four supported output formats:
 4. Plain text ([Markdown](https://en.wikipedia.org/wiki/Markdown) formatted)
    * `./index.php?want=text`
    * `./text.php`
+   
+## Suggested NGINX Config for Nicer URLs
+
+The following example NGINX config illustrates a technique for removing the `.php` from the URLs, turning URLs of the form `http://server.tld/httpEcho/text.php` into URLs of the form `http://server.tld/httpEcho/text`.
+Note that this sample config supports query strings, so URLs of the following form `http://server.tld/httpEcho/text?p1=val1&p2=val2` will also work.
+
+```
+# set up httpEcho
+location /httpEcho/ {
+  try_files $uri $uri/ $uri.php?$query_string;
+}
+```
