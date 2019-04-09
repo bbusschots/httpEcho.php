@@ -25,7 +25,7 @@
         <section class="col">
             <h1>HTTP Request</h1>
             
-            <dl>
+            <table>
                 <dt>URL</dt>
                 <dd><code>{{request.url}}</code></dd>
                 <dt>Protocol Version</dt>
@@ -54,15 +54,25 @@
                     <p class="text-muted">The request did not contain a query string.</p>
                     {{/ request.queryString}}
                 </dd>
-                <dt>Query Parameters <span class="badge badge-pill badge-primary">{{request.formDataCount}}</span></dt>
+                <dt>Query Parameters <span class="badge badge-pill badge-primary">{{request.queryParameterCount}}</span></dt>
                 <dd>
                     {{# request.queryParameterCount}}
-                    <dl>
-                        {{# request.queryParameters}}
-                        <dt><code>{{name}}</code></dt>
-                        <dd><code>{{value}}</code></dd>
-                        {{/ request.queryParameters}}
-                    </dl>
+                    <table class="table table-sm table-hover">
+                        <thead class="thead-light"/>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{# request.queryParameters}}
+                            <tr>
+                                <th><code>{{name}}</code></th>
+                                <td><code>{{value}}</code></td>
+                            </tr>
+                            {{/ request.queryParameters}}
+                        </tbody>
+                    </table>
                     {{/ request.queryParameterCount}}
                     {{^ request.queryParameterCount}}
                     <p class="text-muted">The request contained no query parameters.</p>
@@ -71,12 +81,22 @@
                 <dt>Form Data <span class="badge badge-pill badge-primary">{{request.formDataCount}}</span></dt>
                 <dd>
                     {{# request.formDataCount}}
-                    <dl>
-                        {{# request.formData}}
-                        <dt><code>{{name}}</code></dt>
-                        <dd><code>{{value}}</code></dd>
-                        {{/ request.formData}}
-                    </dl>
+                    <table class="table table-sm table-hover">
+                        <thead class="thead-light"/>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{# request.formData}}
+                            <tr>
+                                <th><code>{{name}}</code></th>
+                                <td><code>{{value}}</code></td>
+                            </tr>
+                            {{/ request.formData}}
+                        </tbody>
+                    </table>
                     {{/ request.formDataCount}}
                     {{^ request.formDataCount}}
                     <p class="text-muted">The request contained no form data.</p>
@@ -85,12 +105,22 @@
                 <dt>Cookies <span class="badge badge-pill badge-primary">{{request.cookieCount}}</span></dt>
                 <dd>
                     {{# request.cookieCount}}
-                    <dl>
-                        {{# request.cookies}}
-                        <dt><code>{{name}}</code></dt>
-                        <dd><code>{{value}}</code></dd>
-                        {{/ request.cookies}}
-                    </dl>
+                    <table class="table table-sm table-hover">
+                        <thead class="thead-light"/>
+                            <tr>
+                                <th>Name</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{# request.cookies}}
+                            <tr>
+                                <th><code>{{name}}</code></th>
+                                <td><code>{{value}}</code></td>
+                            </tr>
+                            {{/ request.cookies}}
+                         </tbody>
+                    </table>
                     {{/ request.cookieCount}}
                     {{^ request.cookieCount}}
                     <p class="text-muted">The request contained no cookies.</p>
