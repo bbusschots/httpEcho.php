@@ -1,4 +1,6 @@
 <?php
+define("MAIN", "MAIN");
+
 // load the common code
 require_once __DIR__.'/lib.php';
 

@@ -1,4 +1,5 @@
 <?php
+if (!defined("MAIN")) die();
 
 // DEBUGGING ONLY: enable error reporting and display
 // error_reporting(E_ALL);
