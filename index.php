@@ -29,4 +29,3 @@ if($want === 'text'){
 }
 // default to HTML
 echo $m->render('html', $echoData);
-?>
